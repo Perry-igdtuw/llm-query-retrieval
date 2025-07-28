@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+python-dotenv
+openai
+langchain
+pypdf
+pinecone-client
+httpx
+tqdm
+PyPDF2
+google-generativeai
