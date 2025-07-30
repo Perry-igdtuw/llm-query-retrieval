@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: hackrx-api
+    env: docker
+    plan: free
+    envVars:
+      - key: TEAM_TOKEN
+        value: 354aa9c9658908371f5c99e1cbf2d2b808d778a2a1e17b5e0fd0ad494d4e8aaa
+      - key: GEMINI_API_KEY
+        value: AIzaSyD--_7Yj-1GUvdZz3cjFceb-_B9oTGD144
+      - key: PINECONE_API_KEY
+        value: pcsk_2mjzFZ_R6h3oEVtiXGRdaU6NtUGJaCghteoY4g9GvGhasMQtJ6GHjckeaaDbnugJfLPF6U
+      - key: PINECONE_INDEX
+        value: hackrx-gemini
