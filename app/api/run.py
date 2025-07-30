@@ -43,9 +43,7 @@ def run_query(request: HackRxRunRequest, authorization: str = Header(None)):
             })
 
         return {
-            "pdf_url": request.url,
-            "questions_answered": len(request.questions),
-            "results": results
+            "answers": [r["answer"] for r in results]
         }
 
     except Exception as e:
