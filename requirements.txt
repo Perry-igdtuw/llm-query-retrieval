@@ -4,7 +4,7 @@ python-dotenv
 openai
 langchain
 pypdf
-pinecone-client
+pinecone
 httpx
 tqdm
 PyPDF2
