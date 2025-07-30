@@ -18,6 +18,10 @@ You are a helpful AI assistant for an insurance policy.
 
 Answer the following question using the provided policy context:
 
+Question: {question}
+
+Context:
+{context}
 
 Answer:"""
 
