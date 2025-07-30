@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, Header
 from pydantic import BaseModel
 from typing import List
 from app.services.document_processor import download_pdf_from_url, extract_text_from_pdf, chunk_text
-from app.services.embedding_service import store_chunks_in_pinecone, embed_text
+from app.services.embedding_service import store_chunks_in_pinecone, embed_text, pc, index
 from app.services.query_service import find_relevant_chunks
 from app.services.answer_service import generate_answer
 import os
@@ -25,16 +25,22 @@ def run_query(request: HackRxRunRequest, authorization: str = Header(None)):
 
         # Step 1: Download & process
         filepath = download_pdf_from_url(request.url)
+        namespace = os.path.basename(filepath).replace(".pdf", "")
+
         text = extract_text_from_pdf(filepath)
         chunks = chunk_text(text)
 
-        # Step 2: Embed & store
-        store_chunks_in_pinecone(chunks)
+        # Step 2: Embed & store(also store the pdf hash to not repeat the file embedding)
+        stats = index.describe_index_stats()
+        already_embedded = stats["namespaces"].get(namespace, {}).get("vector_count", 0) > 0
+
+        if not already_embedded:
+            store_chunks_in_pinecone(chunks, namespace=namespace)
 
         # Step 3: For each question, search + answer
         results = []
         for q in request.questions:
-            relevant = find_relevant_chunks(q)
+            relevant = find_relevant_chunks(q, namespace=namespace)
             answer = generate_answer(q, relevant)
             results.append({
                 "question": q,
